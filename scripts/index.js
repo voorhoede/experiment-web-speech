@@ -60,20 +60,23 @@ function onSpeechRecognitionEvents() {
 if (speechRecognition) {
   onSpeechRecognitionEvents();
 
+  function navigateTo(params) {
+    if (params === "home" || params === "homepage") window.location.href = "/";
+    else if (params === "contact") window.location.href = "/pages/contact.html";
+    else if (params === "blog") window.location.href = "/pages/blog.html";
+    else console.log(`'${params}' is not a valid option.`);
+  }
+
   addCommand("search for", params => {
     if (params) searchInput.value = params;
   });
 
-  addCommand("go to", params => {
-    if (params === "home" || params === "homepage") window.location.href = "/";
-    if (params === "contact") window.location.href = "/contact";
-    if (params === "blog") window.location.href = "/blog";
+  addCommand("navigate to", params => {
+    navigateTo(params);
   });
 
-  addCommand("navigate to", params => {
-    if (params === "home" || params === "homepage") window.location.href = "/";
-    if (params === "contact") window.location.href = "/contact";
-    if (params === "blog") window.location.href = "/blog";
+  addCommand("go to", params => {
+    navigateTo(params);
   });
 
   speechRecognition.start();

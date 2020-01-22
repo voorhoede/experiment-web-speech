@@ -23,14 +23,6 @@ if (speechRecognition) {
 }
 
 function findGoogleVoice(voice) {
-  /*
-      Google Chrome has a strange bug that breaks the Speech Synthesis API.
-      - The breaking of the utterances only happens when the voice is not a native voice.
-      - The cutting out usually occurs between 200-300 characters.
-
-      A workaround can be found here: https://stackoverflow.com/a/23808155
-  */
-
   return voice.name.startsWith("Google US English");
 }
 
@@ -98,7 +90,7 @@ function onSpeechUtteranceEvents() {
 
 function onVoiceChange() {
   speechSynthesis.addEventListener("voiceschanged", () => {
-    voices = speechSynthesis.getVoices();
+    const voices = speechSynthesis.getVoices();
     speechUtterance.voice =
       voices.find(findGoogleVoice) ||
       voices.find(findMicrosoftVoice) ||

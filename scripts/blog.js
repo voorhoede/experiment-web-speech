@@ -5,8 +5,6 @@ const speechUtterance = !!window.SpeechSynthesisUtterance
   ? new window.SpeechSynthesisUtterance()
   : false;
 
-let voices = [];
-
 const blogPost = document.getElementById("blog-post");
 const playButton = document.getElementById("play-button");
 const pauseButton = document.getElementById("pause-button");
@@ -14,14 +12,6 @@ const resumeButton = document.getElementById("resume-button");
 const cancelButton = document.getElementById("cancel-button");
 
 function findGoogleVoice(voice) {
-  /*
-      Google Chrome has a strange bug that breaks the Speech Synthesis API.
-      - The breaking of the utterances only happens when the voice is not a native voice.
-      - The cutting out usually occurs between 200-300 characters.
-
-      A workaround can be found here: https://stackoverflow.com/a/23808155
-  */
-
   return voice.name.startsWith("Google US English");
 }
 
@@ -35,7 +25,7 @@ function findDefaultVoice(voice) {
 
 function onVoiceChange() {
   speechSynthesis.addEventListener("voiceschanged", () => {
-    voices = speechSynthesis.getVoices();
+    const voices = speechSynthesis.getVoices();
     speechUtterance.voice =
       voices.find(findGoogleVoice) ||
       voices.find(findMicrosoftVoice) ||
@@ -73,7 +63,7 @@ function onPlay() {
 
     for (let i = 0; i < children.length; i++) {
       textToRead += children[i].textContent.trim();
-      if (!textToRead.endsWith(". ")) textToRead += ". ";
+      if (!/[.!?]$/.test(textToRead)) textToRead += ". ";
     }
 
     speechSynthesis.cancel();
